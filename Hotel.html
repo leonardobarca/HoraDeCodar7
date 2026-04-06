@@ -23,17 +23,17 @@
 		}		
 
 		function reserva_quartos() {
-			alert('HOTEL {NOME DO HOTELtesteteste} - RESERVA DE QUARTOS');
+			alert('HOTEL DO LEOZAO - RESERVA DE QUARTOS');
 			inicio();
 		}
 
 		function cadastro_hospedes() {
-			alert('HOTEL {NOME DO HOTELteste teste} - CADASTRO DE HÓSPEDES');
+			alert('HOTEL DO LEOZAO - CADASTRO DE HÓSPEDES');
 			inicio();
 		}
 
 		function abastecer_carros() {
-			alert('HOTEL {NOME DO HOTEL} - ABASTECER');
+			alert('HOTEL DO LEOZAO - ABASTECER');
 			inicio();
 		}
 
@@ -41,6 +41,26 @@
 			alert('Por favor, informe um número entre 1 e 4');
 			inicio();
 		}
+
+		function login(){
+			var usuario = prompt("digite seu usuário")
+			var contador_senha = 0
+			while(true){
+				var senha = prompt("digite a senha")
+				if (senha != 2678){
+					alert("Senha incorreta. Digite novamente")
+					contador_senha ++
+					if (contador_senha === 3){
+						window.close()
+					}
+				} else {
+					alert("Bem Vindo ao hotel do Leozão, " + usuario + "é um imenso prazer ter você por aqui")
+					inicio()
+					break
+				}
+			}
+			}
+			
 
 		function sair() {
 			var confirma = confirm('Você deseja sair?');
@@ -53,7 +73,7 @@
 
 		
 		
-		inicio();
+		login();
 	</script>
 </head>
 
