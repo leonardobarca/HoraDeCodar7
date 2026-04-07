@@ -22,6 +22,7 @@
 			}
 		}		
 
+		//MENU PRINCIPAL
 		function reserva_quartos() {
 			alert('HOTEL DO LEOZAO - RESERVA DE QUARTOS');
 			inicio();
@@ -32,11 +33,35 @@
 			inicio();
 		}
 
+		function eventos(){
+			alert("HOTEL DO LEOZAO - EVENTOS")
+			inicio();
+		}
+
+		function ar_condicionado(){
+			alert("HOTEL DO LEOZAO - AR CONDICIONADO")
+			inicio();
+		}
+
 		function abastecer_carros() {
 			alert('HOTEL DO LEOZAO - ABASTECER');
 			inicio();
 		}
 
+		function relatorios_operacionais(){
+			alert("HOTEL DO LEOZAO - RELATÓRIOS OPERACIONAIS")
+			inicio();
+		}
+
+		function sair() {
+			var confirma = confirm('Você deseja sair?');
+			if (confirma) {
+				window.close();
+			} else {
+				inicio();
+			}
+		}
+		
 		function erro() {
 			alert('Por favor, informe um número entre 1 e 4');
 			inicio();
@@ -60,18 +85,6 @@
 				}
 			}
 			}
-			
-
-		function sair() {
-			var confirma = confirm('Você deseja sair?');
-			if (confirma) {
-				window.close();
-			} else {
-				inicio();
-			}
-		}
-
-		
 		
 		login();
 	</script>
