@@ -1,116 +1,261 @@
 <html>
-
 <head>
+    <script>
 
-	<script>
-	
 
-		function inicio() {
 
-			var escolha = parseInt(prompt('Selecione uma opção 1.) Reserva de Quartos 2.) Cadastro de Hóspedes 3.) Abastecimento de Carros 4.) Sair'));
 
-			if (escolha === 1) {
-				reserva_quartos();
-			} else if (escolha === 2) {
-				cadastro_hospedes();
-			} else if (escolha === 3) {
-				abastecer_carros();
-			} else if (escolha === 4) {
-				sair();
-			} else {
-				erro();
-			}
-		}		
+        var quartosDisponiveis = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+        var reservas = [];
+        var hospedes = [];
+        var nomeUsuario;
 
-		//MENU PRINCIPAL
-		//1
-		function reserva_quartos() {
-			alert('HOTEL DO LEOZAO - RESERVA DE QUARTOS');
-			var valorDiaria = prompt("Qual o valor da diária?");
-			if (valorDiaria <= 0) {
-				alert("VALOR INVÁLIDO");
-				reserva_quartos();
-			}
-			var diasHospedagem = prompt("Por quantos dias ficará hospedado(a)?")
-			if (diasHospedagem <= 0 || diasHospedagem > 30) {
-				alert("VALOR INVÁLIDO")
-				reserva_quartos();
-			}
-			
-			inicio();
-		}
+        function inicio() {
+            var escolha = parseInt(prompt('Selecione uma opção 1.) Reserva de Quartos 2.) Cadastro de Hóspedes 3.) Abastecimento de Carros 4.) Sair'));
+            if (escolha === 1) {
+                reserva_quartos();
+            } else if (escolha === 2) {
+                cadastro_hospedes();
+            } else if (escolha === 3) {
+                abastecer_carros();
+            } else if (escolha === 4) {
+                sair();
+            } else {
+                erro();
+            }
+        }
+        //MENU PRINCIPAL
+        //1
+        function reserva_quartos() {
+            alert('[Reservas]');
+            var valorDiaria = Number(prompt("Informe o valor da diária:"));
+            if (valorDiaria <= 0) {
+                alert("Valor inválido");
+                reserva_quartos();
+                return;
+            }
+            var diasHospedagem = Number(prompt("Informe a quantidade de diárias (1-30):"));
+            if (diasHospedagem <= 0 || diasHospedagem > 30) {
+                alert("Valor inválido")
+                reserva_quartos();
+                return;
+            }
+            var nomeHospede = prompt("Informe o nome do hóspede:")
+            var tipoQuarto = prompt("Tipo de quarto (S/E/L):").toUpperCase();
+            var fator;
+            if (tipoQuarto == 'S') {
+                fator = 1.00;
+            } else if (tipoQuarto == 'E') {
+                fator = 1.35;
+            } else if (tipoQuarto == 'L') {
+                fator = 1.65;
+            } else {
+                alert("Tipo inválido, escolha S, E ou L")
+                reserva_quartos();
+                return;
+            }
+            var numQuarto = Number(prompt("Escolha um quarto (1-20):\nQuartos livres: "+quartosDisponiveis));
+            if (numQuarto <= 0 || numQuarto > 20) {
+                alert("ESCOLHA UM NÚMERO DE 1 A 20")
+                reserva_quartos();
+                return;
+            }
+            if (!quartosDisponiveis.includes(numQuarto)) {
+                alert("QUARTO JÁ ESTÁ OCUPADO, ESCOLHA OUTRO\nQuartos livres: "+quartosDisponiveis)
+                reserva_quartos();
+                return;
+            }
+            var subtotal = valorDiaria * diasHospedagem * fator;
+            var taxa = subtotal * 0.10;
+            var total = subtotal + taxa;
+            var tipoNome;
+            if (tipoQuarto == 'S') tipoNome = 'Standard';
+            else if (tipoQuarto == 'E') tipoNome = 'Executivo';
+            else tipoNome = 'Luxo';
+            var resumo = `Resumo:\nHóspede: ${nomeHospede}\nQuarto: ${numQuarto} (${tipoNome})\nSubtotal: R$ ${subtotal.toFixed(2)}\nTaxa de serviço (10%): R$ ${taxa.toFixed(2)}\nTotal: R$ ${total.toFixed(2)}`;
+            alert(resumo);
+            var confirmacao = prompt(`${nomeHospede}, confirma a reserva? (S/N):`).toUpperCase();
+            if (confirmacao != 'S') {
+                alert("Reserva não efetuada.")
+                inicio();
+                return;
+            }
+            quartosDisponiveis.splice(quartosDisponiveis.indexOf(numQuarto), 1);
+            reservas.push({nome: nomeHospede, quarto: numQuarto, dias: diasHospedagem, total: total});
+            alert("Reserva efetuada com sucesso.")
+            inicio();
+        }
+        //2
+        function cadastro_hospedes() {
+            var opcao = prompt("[Cadastro de Hóspedes]\n1-Cadastrar  2-Pesquisar exato  3-Pesquisar prefixo  4-Listar  5-Atualizar  6-Remover  7-Voltar\nOpção:");
+            if (opcao == '1') {
+                if (hospedes.length >= 15) {
+                    alert("Máximo de cadastros atingido");
+                    cadastro_hospedes();
+                    return;
+                }
+                var nome = prompt("Nome do hóspede:");
+                var duplicado = false;
+                for (var i = 0; i < hospedes.length; i++) {
+                    if (hospedes[i].nome == nome) {
+                        duplicado = true;
+                    }
+                }
+                if (duplicado) {
+                    alert("Hóspede já cadastrado");
+                    cadastro_hospedes();
+                    return;
+                }
+                hospedes.push({nome: nome, cadastro: new Date().toLocaleString('pt-BR')});
+                alert("Operação realizada com sucesso");
+                cadastro_hospedes();
+            } else if (opcao == '2') {
+                var busca = prompt("Nome do hóspede:");
+                var encontrado = false;
+                for (var i = 0; i < hospedes.length; i++) {
+                    if (hospedes[i].nome == busca) {
+                        encontrado = true;
+                    }
+                }
+                if (encontrado) {
+                    alert("Hóspede "+busca+" foi encontrado");
+                } else {
+                    alert("Hóspede não encontrado");
+                }
+                cadastro_hospedes();
+            } else if (opcao == '3') {
+                var prefixo = prompt("Prefixo:");
+                var resultado = "Resultados:\n";
+                var achou = false;
+                for (var i = 0; i < hospedes.length; i++) {
+                    if (hospedes[i].nome.startsWith(prefixo)) {
+                        resultado += "["+(i+1)+"] "+hospedes[i].nome+"\n";
+                        achou = true;
+                    }
+                }
+                if (!achou) {
+                    alert("Hóspede não encontrado");
+                } else {
+                    alert(resultado);
+                }
+                cadastro_hospedes();
+            } else if (opcao == '4') {
+                if (hospedes.length == 0) {
+                    alert("Nenhum hóspede cadastrado");
+                    cadastro_hospedes();
+                    return;
+                }
+                var ordenado = hospedes.slice().sort(function(a, b) {
+                    if (a.nome < b.nome) return -1;
+                    if (a.nome > b.nome) return 1;
+                    return 0;
+                });
+                var lista = "Hóspedes cadastrados:\n";
+                for (var i = 0; i < ordenado.length; i++) {
+                    lista += "["+(i+1)+"] "+ordenado[i].nome+" - "+ordenado[i].cadastro+"\n";
+                }
+                alert(lista);
+                cadastro_hospedes();
+            } else if (opcao == '5') {
+                if (hospedes.length == 0) {
+                    alert("Nenhum hóspede cadastrado");
+                    cadastro_hospedes();
+                    return;
+                }
+                var lista = "Qual hóspede deseja atualizar?\n";
+                for (var i = 0; i < hospedes.length; i++) {
+                    lista += "["+(i+1)+"] "+hospedes[i].nome+"\n";
+                }
+                var idx = Number(prompt(lista+"Índice:")) - 1;
+                if (idx < 0 || idx >= hospedes.length) {
+                    alert("Índice inválido");
+                    cadastro_hospedes();
+                    return;
+                }
+                var novoNome = prompt("Novo nome:");
+                var duplicado = false;
+                for (var i = 0; i < hospedes.length; i++) {
+                    if (hospedes[i].nome == novoNome) {
+                        duplicado = true;
+                    }
+                }
+                if (duplicado) {
+                    alert("Hóspede já cadastrado");
+                    cadastro_hospedes();
+                    return;
+                }
+                hospedes[idx].nome = novoNome;
+                alert("Operação realizada com sucesso");
+                cadastro_hospedes();
+            } else if (opcao == '6') {
+                if (hospedes.length == 0) {
+                    alert("Nenhum hóspede cadastrado");
+                    cadastro_hospedes();
+                    return;
+                }
+                var lista = "Qual hóspede deseja remover?\n";
+                for (var i = 0; i < hospedes.length; i++) {
+                    lista += "["+(i+1)+"] "+hospedes[i].nome+"\n";
+                }
+                var idx = Number(prompt(lista+"Índice:")) - 1;
+                if (idx < 0 || idx >= hospedes.length) {
+                    alert("Índice inválido");
+                    cadastro_hospedes();
+                    return;
+                }
+                hospedes.splice(idx, 1);
+                alert("Operação realizada com sucesso");
+                cadastro_hospedes();
+            } else if (opcao == '7') {
+                inicio();
+            } else {
+                alert("Opção inválida");
+                cadastro_hospedes();
+            }
+        }
+        //3
+        function abastecer_carros() {
+            alert('HOTEL DO LEOZAO - ABASTECER');
+            inicio();
+        }
+        //4
+        function sair() {
+            var confirma = confirm('Você deseja sair?');
+            if (confirma) {
+                alert(`Muito obrigado e até logo, ${nomeUsuario}.`)
+                window.close();
+            } else {
+                inicio();
+            }
+        }
 
-		//2
-		function cadastro_hospedes() {
-			alert('HOTEL DO LEOZAO - CADASTRO DE HÓSPEDES');
-			inicio();
-		}
+        function erro() {
+            alert('Por favor, informe um número entre 1 e 4');
+            inicio();
+        }
+        function login() {
+            nomeUsuario = prompt("Digite seu nome")
+            var contador_senha = 0
+            while(true) {
+                var senha = prompt("Digite a senha")
+                if (senha != 2678) {
+                    alert("Senha incorreta. Digite novamente")
+                    contador_senha++
+                    if (contador_senha === 3) {
+                        window.close()
+                    }
+                } else {
+                    alert("Bem Vindo ao hotel do Leozão, " + nomeUsuario + ". É um imenso prazer ter você por aqui!")
+                    inicio()
+                    break
+                }
+            }
+        }
 
-		//3
-		function eventos(){
-			alert("HOTEL DO LEOZAO - EVENTOS")
-			inicio();
-		}
+        login();
 
-		//4
-		function ar_condicionado(){
-			alert("HOTEL DO LEOZAO - AR CONDICIONADO")
-			inicio();
-		}
-
-		//5
-		function abastecer_carros() {
-			alert('HOTEL DO LEOZAO - ABASTECER');
-			inicio();
-		}
-
-		//6
-		function relatorios_operacionais(){
-			alert("HOTEL DO LEOZAO - RELATÓRIOS OPERACIONAIS")
-			inicio();
-		}
-
-		//7
-		function sair() {
-			var confirma = confirm('Você deseja sair?');
-			if (confirma) {
-				alert("Muito obrigado e até logo, {Nome}.")
-				window.close();
-			} else {
-				inicio();
-			}
-		}
-		
-		function erro() {
-			alert('Por favor, informe um número entre 1 e 4');
-			inicio();
-		}
-
-		function login(){
-			var usuario = prompt("digite seu usuário")
-			var contador_senha = 0
-			while(true){
-				var senha = prompt("digite a senha")
-				if (senha != 2678){
-					alert("Senha incorreta. Digite novamente")
-					contador_senha ++
-					if (contador_senha === 3){
-						window.close()
-					}
-				} else {
-					alert("Bem Vindo ao hotel do Leozão, " + usuario + ". É um imenso prazer ter você por aqui!")
-					inicio()
-					break
-				}
-			}
-			}
-		
-		login();
-	</script>
+    </script>
 </head>
-
 <body>
-
 </body>
-
 </html>
