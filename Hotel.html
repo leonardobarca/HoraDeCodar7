@@ -9,7 +9,7 @@
         var nomeUsuario;
 
         function inicio() {
-            var escolha = parseInt(prompt('Selecione uma opção 1.) Reserva de Quartos 2.) Cadastro de Hóspedes 3.) Eventos 4.) Abastecimento de Carros 5.) Sair'));
+            var escolha = parseInt(prompt('Selecione uma opção 1.) Reserva de Quartos 2.) Cadastro de Hóspedes 3.) Eventos 4.) Ar-Condicionado 5.) Abastecimento de Carros 6.) Sair'));
             if (escolha === 1) {
                 reserva_quartos();
             } else if (escolha === 2) {
@@ -17,8 +17,10 @@
             } else if (escolha === 3) {
                 eventos();
             } else if (escolha === 4) {
-                abastecer_carros();
+                ar_condicionado();
             } else if (escolha === 5) {
+                abastecer_carros();
+            } else if (escolha === 6) {
                 sair();
             } else {
                 erro();
@@ -310,11 +312,99 @@
             inicio();
         }
         //4
-        function abastecer_carros() {
-            alert('HOTEL DO LEOZAO - ABASTECER');
+        function ar_condicionado() {
+            alert('[Ar-Condicionado]');
+            var orcamentos = [];
+
+            while(true) {
+                var empresa = prompt("Empresa:");
+                var valorAparelho = Number(prompt("Valor por aparelho:"));
+                var quantidade = Number(prompt("Quantidade:"));
+                var desconto = Number(prompt("Desconto (%):"));
+                var minimoDesconto = Number(prompt("Mínimo para desconto:"));
+                var deslocamento = Number(prompt("Deslocamento:"));
+
+                var bruto = valorAparelho * quantidade;
+                var totalDesconto = 0;
+                if (quantidade >= minimoDesconto) {
+                    totalDesconto = bruto * (desconto / 100);
+                }
+                var total = bruto - totalDesconto + deslocamento;
+
+                alert("O serviço de "+empresa+" custará R$ "+total.toFixed(2));
+                orcamentos.push({nome: empresa, total: total});
+
+                var continua = prompt("Deseja informar novos dados, "+nomeUsuario+"? (S/N):").toUpperCase();
+                if (continua != 'S') {
+                    break;
+                }
+            }
+
+            var menor = orcamentos[0];
+            var maior = orcamentos[0];
+            for (var i = 1; i < orcamentos.length; i++) {
+                if (orcamentos[i].total < menor.total) {
+                    menor = orcamentos[i];
+                }
+                if (orcamentos[i].total > maior.total) {
+                    maior = orcamentos[i];
+                }
+            }
+
+            var diferenca = ((maior.total - menor.total) / maior.total) * 100;
+            alert("Melhor orçamento: "+menor.nome+" — R$ "+menor.total.toFixed(2)+"\nPior orçamento: "+maior.nome+" — R$ "+maior.total.toFixed(2)+"\nDiferença: "+diferenca.toFixed(1)+"%");
             inicio();
         }
         //5
+        function abastecer_carros() {
+            alert('[Abastecimento]');
+
+            var alcoolWayne = Number(prompt("Wayne Oil -> Preço do álcool:"));
+            var gasolinaWayne = Number(prompt("Wayne Oil -> Preço da gasolina:"));
+            var alcoolStark = Number(prompt("Stark Petrol -> Preço do álcool:"));
+            var gasolinaStark = Number(prompt("Stark Petrol -> Preço da gasolina:"));
+
+            alert("Wayne Oil -> Álcool: "+alcoolWayne.toFixed(2)+" | Gasolina: "+gasolinaWayne.toFixed(2)+"\nStark Petrol -> Álcool: "+alcoolStark.toFixed(2)+" | Gasolina: "+gasolinaStark.toFixed(2));
+
+            var melhorWayne;
+            var custoWayne;
+            if (alcoolWayne <= gasolinaWayne * 0.70) {
+                melhorWayne = 'Álcool';
+                custoWayne = alcoolWayne * 42;
+            } else {
+                melhorWayne = 'Gasolina';
+                custoWayne = gasolinaWayne * 42;
+            }
+
+            var melhorStark;
+            var custoStark;
+            if (alcoolStark <= gasolinaStark * 0.70) {
+                melhorStark = 'Álcool';
+                custoStark = alcoolStark * 42;
+            } else {
+                melhorStark = 'Gasolina';
+                custoStark = gasolinaStark * 42;
+            }
+
+            alert("Wayne Oil: melhor opção = "+melhorWayne+" | Total (42L) = R$ "+custoWayne.toFixed(2)+"\nStark Petrol: melhor opção = "+melhorStark+" | Total (42L) = R$ "+custoStark.toFixed(2));
+
+            var postoCheap;
+            var combustivelCheap;
+            var custoCheap;
+            if (custoWayne <= custoStark) {
+                postoCheap = 'Wayne Oil';
+                combustivelCheap = melhorWayne.toLowerCase();
+                custoCheap = custoWayne;
+            } else {
+                postoCheap = 'Stark Petrol';
+                combustivelCheap = melhorStark.toLowerCase();
+                custoCheap = custoStark;
+            }
+
+            alert(nomeUsuario+", é mais barato abastecer com "+combustivelCheap+" no posto "+postoCheap+".");
+            inicio();
+        }
+        //6
         function sair() {
             var confirma = confirm('Você deseja sair?');
             if (confirma) {
@@ -326,7 +416,7 @@
         }
 
         function erro() {
-            alert('Por favor, informe um número entre 1 e 5');
+            alert('Por favor, informe um número entre 1 e 6');
             inicio();
         }
         function login() {
