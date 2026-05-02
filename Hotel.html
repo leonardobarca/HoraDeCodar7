@@ -4,22 +4,21 @@
 
         var quartosDisponiveis = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
         var reservas = [];
-        var hospedes = [];
         var eventosAgenda = [];
         var nomeUsuario;
 
         function inicio() {
-            var escolha = parseInt(prompt('Selecione uma opção 1.) Reserva de Quartos 2.) Cadastro de Hóspedes 3.) Eventos 4.) Ar-Condicionado 5.) Abastecimento de Carros 6.) Sair'));
+            var escolha = parseInt(prompt('Selecione uma opção 1.) Reserva de Quartos 2.) Eventos 3.) Ar-Condicionado 4.) Abastecimento de Carros 5.) Relatórios 6.) Sair'));
             if (escolha === 1) {
                 reserva_quartos();
             } else if (escolha === 2) {
-                cadastro_hospedes();
-            } else if (escolha === 3) {
                 eventos();
-            } else if (escolha === 4) {
+            } else if (escolha === 3) {
                 ar_condicionado();
-            } else if (escolha === 5) {
+            } else if (escolha === 4) {
                 abastecer_carros();
+            } else if (escolha === 5) {
+                relatorios();
             } else if (escolha === 6) {
                 sair();
             } else {
@@ -88,134 +87,6 @@
             inicio();
         }
         //2
-        function cadastro_hospedes() {
-            var opcao = prompt("[Cadastro de Hóspedes]\n1-Cadastrar  2-Pesquisar exato  3-Pesquisar prefixo  4-Listar  5-Atualizar  6-Remover  7-Voltar\nOpção:");
-            if (opcao == '1') {
-                if (hospedes.length >= 15) {
-                    alert("Máximo de cadastros atingido");
-                    cadastro_hospedes();
-                    return;
-                }
-                var nome = prompt("Nome do hóspede:");
-                var duplicado = false;
-                for (var i = 0; i < hospedes.length; i++) {
-                    if (hospedes[i].nome == nome) {
-                        duplicado = true;
-                    }
-                }
-                if (duplicado) {
-                    alert("Hóspede já cadastrado");
-                    cadastro_hospedes();
-                    return;
-                }
-                hospedes.push({nome: nome, cadastro: new Date().toLocaleString('pt-BR')});
-                alert("Operação realizada com sucesso");
-                cadastro_hospedes();
-            } else if (opcao == '2') {
-                var busca = prompt("Nome do hóspede:");
-                var encontrado = false;
-                for (var i = 0; i < hospedes.length; i++) {
-                    if (hospedes[i].nome == busca) {
-                        encontrado = true;
-                    }
-                }
-                if (encontrado) {
-                    alert("Hóspede "+busca+" foi encontrado");
-                } else {
-                    alert("Hóspede não encontrado");
-                }
-                cadastro_hospedes();
-            } else if (opcao == '3') {
-                var prefixo = prompt("Prefixo:");
-                var resultado = "Resultados:\n";
-                var achou = false;
-                for (var i = 0; i < hospedes.length; i++) {
-                    if (hospedes[i].nome.startsWith(prefixo)) {
-                        resultado += "["+(i+1)+"] "+hospedes[i].nome+"\n";
-                        achou = true;
-                    }
-                }
-                if (!achou) {
-                    alert("Hóspede não encontrado");
-                } else {
-                    alert(resultado);
-                }
-                cadastro_hospedes();
-            } else if (opcao == '4') {
-                if (hospedes.length == 0) {
-                    alert("Nenhum hóspede cadastrado");
-                    cadastro_hospedes();
-                    return;
-                }
-                var ordenado = hospedes.slice().sort(function(a, b) {
-                    if (a.nome < b.nome) return -1;
-                    if (a.nome > b.nome) return 1;
-                    return 0;
-                });
-                var lista = "Hóspedes cadastrados:\n";
-                for (var i = 0; i < ordenado.length; i++) {
-                    lista += "["+(i+1)+"] "+ordenado[i].nome+" - "+ordenado[i].cadastro+"\n";
-                }
-                alert(lista);
-                cadastro_hospedes();
-            } else if (opcao == '5') {
-                if (hospedes.length == 0) {
-                    alert("Nenhum hóspede cadastrado");
-                    cadastro_hospedes();
-                    return;
-                }
-                var lista = "Qual hóspede deseja atualizar?\n";
-                for (var i = 0; i < hospedes.length; i++) {
-                    lista += "["+(i+1)+"] "+hospedes[i].nome+"\n";
-                }
-                var idx = Number(prompt(lista+"Índice:")) - 1;
-                if (idx < 0 || idx >= hospedes.length) {
-                    alert("Índice inválido");
-                    cadastro_hospedes();
-                    return;
-                }
-                var novoNome = prompt("Novo nome:");
-                var duplicado = false;
-                for (var i = 0; i < hospedes.length; i++) {
-                    if (hospedes[i].nome == novoNome) {
-                        duplicado = true;
-                    }
-                }
-                if (duplicado) {
-                    alert("Hóspede já cadastrado");
-                    cadastro_hospedes();
-                    return;
-                }
-                hospedes[idx].nome = novoNome;
-                alert("Operação realizada com sucesso");
-                cadastro_hospedes();
-            } else if (opcao == '6') {
-                if (hospedes.length == 0) {
-                    alert("Nenhum hóspede cadastrado");
-                    cadastro_hospedes();
-                    return;
-                }
-                var lista = "Qual hóspede deseja remover?\n";
-                for (var i = 0; i < hospedes.length; i++) {
-                    lista += "["+(i+1)+"] "+hospedes[i].nome+"\n";
-                }
-                var idx = Number(prompt(lista+"Índice:")) - 1;
-                if (idx < 0 || idx >= hospedes.length) {
-                    alert("Índice inválido");
-                    cadastro_hospedes();
-                    return;
-                }
-                hospedes.splice(idx, 1);
-                alert("Operação realizada com sucesso");
-                cadastro_hospedes();
-            } else if (opcao == '7') {
-                inicio();
-            } else {
-                alert("Opção inválida");
-                cadastro_hospedes();
-            }
-        }
-        //3
         function eventos() {
             alert('[Eventos]');
 
@@ -311,7 +182,7 @@
             alert("Reserva efetuada com sucesso.");
             inicio();
         }
-        //4
+        //3
         function ar_condicionado() {
             alert('[Ar-Condicionado]');
             var orcamentos = [];
@@ -355,7 +226,7 @@
             alert("Melhor orçamento: "+menor.nome+" — R$ "+menor.total.toFixed(2)+"\nPior orçamento: "+maior.nome+" — R$ "+maior.total.toFixed(2)+"\nDiferença: "+diferenca.toFixed(1)+"%");
             inicio();
         }
-        //5
+        //4
         function abastecer_carros() {
             alert('[Abastecimento]');
 
@@ -390,18 +261,46 @@
 
             var postoCheap;
             var combustivelCheap;
-            var custoCheap;
             if (custoWayne <= custoStark) {
                 postoCheap = 'Wayne Oil';
                 combustivelCheap = melhorWayne.toLowerCase();
-                custoCheap = custoWayne;
             } else {
                 postoCheap = 'Stark Petrol';
                 combustivelCheap = melhorStark.toLowerCase();
-                custoCheap = custoStark;
             }
 
             alert(nomeUsuario+", é mais barato abastecer com "+combustivelCheap+" no posto "+postoCheap+".");
+            inicio();
+        }
+        //5
+        function relatorios() {
+            var quartosOcupados = 20 - quartosDisponiveis.length;
+            var taxaOcupacao = (quartosOcupados / 20) * 100;
+
+            var receitaHospedagem = 0;
+            for (var i = 0; i < reservas.length; i++) {
+                receitaHospedagem += reservas[i].total;
+            }
+
+            var receitaEventos = 0;
+            for (var i = 0; i < eventosAgenda.length; i++) {
+                receitaEventos += eventosAgenda[i].total;
+            }
+
+            var receitaTotal = receitaHospedagem + receitaEventos;
+
+            var rel = "[Relatórios Operacionais]\n";
+            rel += "================================\n";
+            rel += "Reservas confirmadas:    "+reservas.length+"\n";
+            rel += "Taxa de ocupação:        "+taxaOcupacao.toFixed(1)+"%\n";
+            rel += "Eventos confirmados:     "+eventosAgenda.length+"\n";
+            rel += "================================\n";
+            rel += "Receita hospedagem:  R$ "+receitaHospedagem.toFixed(2)+"\n";
+            rel += "Receita eventos:     R$ "+receitaEventos.toFixed(2)+"\n";
+            rel += "Total geral:         R$ "+receitaTotal.toFixed(2)+"\n";
+            rel += "================================";
+
+            alert(rel);
             inicio();
         }
         //6
